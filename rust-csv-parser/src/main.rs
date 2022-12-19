@@ -41,6 +41,7 @@ fn main() {
                 .alias("isGeneric"),
         )
         .filter(col("amount").gt(0))
+        .filter(col("category").is_not_null())
         .collect()
         .unwrap();
 
