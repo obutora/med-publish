@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
 import { MedicineService } from './medicine.service';
 import { medicine } from '@prisma/client';
 import MedicineModel from './medicine_entity';
@@ -7,7 +7,13 @@ import MedicineModel from './medicine_entity';
 export class MedicineController {
   constructor(private readonly medicineService: MedicineService) {}
 
-  @Get('med')
+  @Get('name/:name')
+  async getMedicineByName(@Param('name') name: string): Promise<medicine[]> {
+    console.log(name);
+    return await this.medicineService.getMedicineByName(name);
+  }
+
+  @Get('all')
   async getAll(): Promise<medicine[]> {
     return await this.medicineService.getAll();
   }
@@ -27,8 +33,9 @@ export class MedicineController {
   }
 
   @Post('updateAll')
-  async updateAll(@Body() postData: { postData: MedicineModel[] }) {
-    await this.medicineService.updateAll(postData.postData);
+  async updateAll(@Body() post: { postData: string }) {
+    const data = JSON.parse(post.postData) as MedicineModel[];
+    return await this.medicineService.updateAll(data);
     // await this.medicineService.deleteAll();
     // return await this.medicineService.getAll();
   }
