@@ -1,3 +1,5 @@
 /rust-csv-parser/target
 
 /data/*
+
+.env
