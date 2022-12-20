@@ -3,3 +3,8 @@
 /data/*
 
 .env
+
+flutter_ph_client/android
+flutter_ph_client/ios
+flutter_ph_client/linux
+flutter_ph_client/macos
