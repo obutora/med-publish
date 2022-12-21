@@ -1,5 +1,6 @@
 use encoding_rs;
 use polars::{lazy::dsl::when, prelude::*};
+use std::env;
 use std::fs::File;
 use std::{fs, io};
 
@@ -15,8 +16,11 @@ pub fn convert_to_utf8(file_path: &str, out_path: &str) -> Result<(), io::Error>
 }
 
 fn main() {
-    let input_path = "../data/data.csv";
-    let output_path = "../data/data_utf8.csv";
+    // 引数を取得
+    let args: Vec<String> = env::args().collect();
+    let input_path = &args[1];
+
+    let output_path = "../data/result.csv";
     let out_json_path = "../data/data.json";
 
     convert_to_utf8(input_path, output_path).expect("Error : Utf8 convert failed");
