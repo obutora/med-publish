@@ -20,8 +20,8 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let input_path = &args[1];
 
-    let output_path = "../data/result.csv";
-    let out_json_path = "../data/data.json";
+    let output_path = "./data/result.csv";
+    let out_json_path = "./data/data.json";
 
     convert_to_utf8(input_path, output_path).expect("Error : Utf8 convert failed");
 
