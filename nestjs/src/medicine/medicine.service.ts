@@ -11,14 +11,38 @@ export class MedicineService {
     return await this.prisma.medicine.findMany();
   }
 
-  async getMedicineByName(name: string): Promise<medicine[]> {
-    return await this.prisma.medicine.findMany({
-      where: {
-        name: {
-          contains: name,
+  async getMedicineByName(
+    name: string,
+    isAllContains: boolean,
+  ): Promise<medicine[]> {
+    console.log('name', name);
+    console.log('isAllContains: ', isAllContains);
+    if (isAllContains) {
+      return await this.prisma.medicine.findMany({
+        where: {
+          OR: [
+            {
+              name: {
+                contains: name,
+              },
+            },
+            {
+              general_name: {
+                contains: name,
+              },
+            },
+          ],
         },
-      },
-    });
+      });
+    } else {
+      return await this.prisma.medicine.findMany({
+        where: {
+          name: {
+            contains: name,
+          },
+        },
+      });
+    }
   }
 
   async createMedicine(data: MedicineModel): Promise<medicine> {
@@ -27,6 +51,7 @@ export class MedicineService {
     });
   }
 
+  // NOTE: 一括更新の際に、既存のデータを削除してから新しいデータを追加する
   async updateAll(data: MedicineModel[]): Promise<string> {
     if (data[0]) {
       await this.deleteAll();

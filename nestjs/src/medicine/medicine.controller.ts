@@ -1,4 +1,11 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  ParseBoolPipe,
+  Post,
+} from '@nestjs/common';
 import { MedicineService } from './medicine.service';
 import { medicine } from '@prisma/client';
 import MedicineModel from './medicine_entity';
@@ -7,10 +14,13 @@ import MedicineModel from './medicine_entity';
 export class MedicineController {
   constructor(private readonly medicineService: MedicineService) {}
 
-  @Get('name/:name')
-  async getMedicineByName(@Param('name') name: string): Promise<medicine[]> {
-    console.log(name);
-    return await this.medicineService.getMedicineByName(name);
+  //isAllContainsがtrueの場合は、nameとgeneral_nameの両方を検索する
+  @Get('name/:name/:isAllContains')
+  async getMedicineByName(
+    @Param('name') name: string,
+    @Param('isAllContains', ParseBoolPipe) isAllContains: boolean,
+  ): Promise<medicine[]> {
+    return await this.medicineService.getMedicineByName(name, isAllContains);
   }
 
   @Get('all')
@@ -40,9 +50,9 @@ export class MedicineController {
     // return await this.medicineService.getAll();
   }
 
-  @Delete('med')
-  async deleteAll(): Promise<string> {
-    await this.medicineService.deleteAll();
-    return 'deleted';
-  }
+  // @Delete('med')
+  // async deleteAll(): Promise<string> {
+  //   await this.medicineService.deleteAll();
+  //   return 'deleted';
+  // }
 }
