@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma.service';
-import { medicine } from '@prisma/client';
+import { medicine, searchLog } from '@prisma/client';
 import MedicineModel from './medicine_entity';
 
 @Injectable()
@@ -11,12 +11,25 @@ export class MedicineService {
     return await this.prisma.medicine.findMany();
   }
 
+  async getLog(): Promise<searchLog[]> {
+    return await this.prisma.searchLog.findMany();
+  }
+
   async getMedicineByName(
     name: string,
     isAllContains: boolean,
   ): Promise<medicine[]> {
     console.log('name', name);
     console.log('isAllContains: ', isAllContains);
+
+    // 検索ワードのログを保存
+    await this.prisma.searchLog.create({
+      data: {
+        keyword: name,
+        isAllContains: isAllContains,
+      },
+    });
+
     if (isAllContains) {
       return await this.prisma.medicine.findMany({
         where: {

@@ -20,3 +20,10 @@ model medicine {
   unit_price   Float
   amount       Float
 }
+
+model searchLog {
+  id            Int      @id @default(autoincrement())
+  keyword       String
+  isAllContains Boolean
+  timestamp     DateTime @default(now())
+}
