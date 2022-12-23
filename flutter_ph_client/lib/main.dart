@@ -36,6 +36,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   PostStatus postStatus = PostStatus.none;
+  bool isPosting = false;
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +61,15 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             ElevatedButton.icon(
               label: const Text('CSVを選択して送信'),
-              icon: const Icon(CupertinoIcons.cloud_upload_fill),
+              icon: isPosting
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                      ),
+                    )
+                  : const Icon(CupertinoIcons.cloud_upload_fill),
               style: ElevatedButton.styleFrom(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -71,11 +80,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               onPressed: () async {
+                setState(() {
+                  isPosting = true;
+                });
+
                 await DataFileHandler.pickCsvSaveJson();
 
                 final jsonString = await DataFileHandler.readJson();
                 final bool isScucessPost =
                     await MedHttpHandler.putJson(jsonString);
+                // print(jsonString);
+                // const bool isScucessPost = true;
 
                 if (isScucessPost) {
                   setState(() {
@@ -86,6 +101,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     postStatus = PostStatus.failed;
                   });
                 }
+
+                setState(() {
+                  isPosting = false;
+                });
               },
             ),
             const SizedBox(
