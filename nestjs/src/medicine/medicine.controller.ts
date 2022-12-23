@@ -33,6 +33,11 @@ export class MedicineController {
     return await this.medicineService.getLog();
   }
 
+  @Get('status')
+  async getStatus() {
+    return await this.medicineService.getStatus();
+  }
+
   // @Post('med')
   // async create(): Promise<MedicineModel> {
   //   return await this.medicineService.createMedicine({

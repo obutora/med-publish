@@ -15,6 +15,10 @@ export class MedicineService {
     return await this.prisma.searchLog.findMany();
   }
 
+  async getStatus() {
+    return await this.prisma.status.findMany();
+  }
+
   async getMedicineByName(
     name: string,
     isAllContains: boolean,
@@ -60,35 +64,48 @@ export class MedicineService {
 
   async createMedicine(data: MedicineModel): Promise<medicine> {
     return await this.prisma.medicine.create({
-      data,
+      data: data,
     });
   }
 
   // NOTE: 一括更新の際に、既存のデータを削除してから新しいデータを追加する
   async updateAll(data: MedicineModel[]): Promise<string> {
     if (data[0]) {
+      const startTime = performance.now();
+      await this.statusLog();
+      const updateStatusTime = performance.now();
+
       await this.deleteAll();
+      const deleteTime = performance.now();
 
       data.forEach(async (med) => {
         await this.createMedicine(med);
       });
 
-      await this.prisma.status.upsert({
-        where: {
-          id: 1,
-        },
-        update: {
-          updateAt: new Date(),
-        },
-        create: {
-          updateAt: new Date(),
-        },
-      });
+      const insertTime = performance.now();
+
+      console.log('updateStatusTime: ', updateStatusTime - startTime);
+      console.log('deleteTime: ', deleteTime - updateStatusTime);
+      console.log('insertTime: ', insertTime - deleteTime);
 
       return 'updated';
     } else {
       throw new BadRequestException();
     }
+  }
+
+  async statusLog() {
+    await this.prisma.status.delete({
+      where: {
+        id: 1,
+      },
+    });
+
+    return await this.prisma.status.create({
+      data: {
+        id: 1,
+      },
+    });
   }
 
   async deleteAll() {
