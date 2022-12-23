@@ -10,6 +10,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model status {
+  id       Int      @id @default(autoincrement())
+  updateAt DateTime @default(now())
+}
+
 model medicine {
   id           Int     @id @default(autoincrement())
   category     String

@@ -73,6 +73,18 @@ export class MedicineService {
         await this.createMedicine(med);
       });
 
+      await this.prisma.status.upsert({
+        where: {
+          id: 1,
+        },
+        update: {
+          updateAt: new Date(),
+        },
+        create: {
+          updateAt: new Date(),
+        },
+      });
+
       return 'updated';
     } else {
       throw new BadRequestException();
