@@ -1,10 +1,6 @@
-import {
-  component$,
-  Resource,
-  useResource$,
-  useSignal,
-} from "@builder.io/qwik";
+import { component$, Resource, useResource$, useStore } from "@builder.io/qwik";
 import axios from "axios";
+import Radio_card from "../radio_button/radio_card";
 import S_card from "./s_card";
 
 interface medicine {
@@ -19,15 +15,18 @@ interface medicine {
 }
 
 export default component$(() => {
-  const inputState = useSignal("");
+  //   const inputState = useSignal("");
+  const inputState = useStore({
+    searchWord: "",
+    isAllSell: false,
+  });
 
   const medResource = useResource$<medicine[]>(async (ctx) => {
-    ctx.track(() => inputState.value);
-
-    console.log(inputState.value);
+    ctx.track(() => inputState.searchWord);
+    ctx.track(() => inputState.isAllSell);
 
     const result = await axios.get(
-      `http://localhost:3000/medicine/name/${inputState.value}/false`
+      `http://localhost:3000/medicine/name/${inputState.searchWord}/${inputState.isAllSell}`
     );
 
     return result.data;
@@ -47,19 +46,11 @@ export default component$(() => {
           id="default-input"
           class="bg-sky-50/30 border md:w-1/2 border-gray-300 text-gray-900 font-semibold rounded-lg text-lg focus:ring-blue-500 focus:border-blue-500 p-2.5"
           preventdefault:click
-          onChange$={(e) => (inputState.value = e.target.value)}
+          onChange$={(e) => (inputState.searchWord = e.target.value)}
         />
         <button
           preventdefault:click
           class="bg-kSkyBlue rounded-md text-kDarkBlue font-semibold p-2.5"
-          onClick$={async () => {
-            console.log(inputState.value);
-            const result = await axios.get(
-              `http://localhost:3000/medicine/name/${inputState.value}/false`
-            );
-
-            console.log(result.data);
-          }}
         >
           <svg
             width="24"
@@ -74,6 +65,27 @@ export default component$(() => {
             />
           </svg>
         </button>
+      </div>
+
+      <div class={"grid grid-cols-1 xl:grid-cols-2 gap-4 mt-4"}>
+        <Radio_card
+          label="商品名"
+          description="ノルバスクで検索すると、ノルバスクのみがヒットし、アムロジピンはヒットしません。"
+          value={"0"}
+          checked={true}
+          onChange$={() => {
+            inputState.isAllSell = false;
+          }}
+        />
+        <Radio_card
+          label="成分名"
+          description="アムロジピンで検索すると、アムロジピンのほかノルバスクやアムバロなどアムロジピンを含むすべての商品がヒットします。"
+          value={"1"}
+          checked={false}
+          onChange$={() => {
+            inputState.isAllSell = true;
+          }}
+        />
       </div>
 
       <div class="mt-4">

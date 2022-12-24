@@ -50,6 +50,9 @@ export class MedicineService {
             },
           ],
         },
+        orderBy: {
+          name: 'asc',
+        },
       });
     } else {
       return await this.prisma.medicine.findMany({
@@ -57,6 +60,9 @@ export class MedicineService {
           name: {
             contains: name,
           },
+        },
+        orderBy: {
+          name: 'asc',
         },
       });
     }
