@@ -37,7 +37,7 @@ export default component$(() => {
     <S_card>
       <label
         for="default-input"
-        class="block mb-2 text-sm text-kSkyBlue/60 dark:text-white w-full"
+        class="block mb-2 text-sm text-kDarkBlue/60 dark:text-white w-full"
       >
         薬の名前を入力して🔎ボタンで検索できます。
       </label>
