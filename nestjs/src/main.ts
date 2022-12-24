@@ -7,6 +7,8 @@ async function bootstrap() {
 
   app.use(bodyParser.json({ limit: '2mb' })); // jsonをパースする際のlimitを設定
   app.use(bodyParser.urlencoded({ limit: '2mb', extended: true })); // urlencodeされたボディをパースする際のlimitを設定
+
+  app.enableCors(); // CORSを許可
   await app.listen(3000);
 }
 bootstrap();
