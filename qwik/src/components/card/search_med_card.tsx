@@ -26,7 +26,9 @@ export default component$(() => {
     ctx.track(() => inputState.isAllSell);
 
     const result = await axios.get(
-      `http://localhost:3000/medicine/name/${inputState.searchWord}/${inputState.isAllSell}`
+      `${import.meta.env.VITE_ENDPOINT}/medicine/name/${
+        inputState.searchWord
+      }/${inputState.isAllSell}`
     );
 
     return result.data;

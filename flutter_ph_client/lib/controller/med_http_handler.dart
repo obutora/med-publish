@@ -1,8 +1,11 @@
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 class MedHttpHandler {
   static Future<bool> putJson(String jsonString) async {
-    final Uri endpoint = Uri.parse('http://localhost:3000/medicine/updateAll');
+    final baseUrl = dotenv.env['ENDPOINT'];
+
+    final Uri endpoint = Uri.parse('$baseUrl/medicine/updateAll');
 
     try {
       final response = await http.post(endpoint, body: {
