@@ -11,5 +11,9 @@ export default component$(() => {
     fetchedUpdatedAt.value = `${date.toLocaleString()}`;
   });
 
-  return <p class={"text-sm"}>{`最終更新 : ${fetchedUpdatedAt.value}`}</p>;
+  return (
+    <p
+      class={"text-sm text-kDarkBlue"}
+    >{`最終更新 : ${fetchedUpdatedAt.value}`}</p>
+  );
 });

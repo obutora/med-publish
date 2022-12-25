@@ -33,6 +33,11 @@ export class MedicineController {
     return await this.medicineService.getLog();
   }
 
+  @Get('count')
+  async getCount() {
+    return await this.medicineService.getCount();
+  }
+
   @Get('status')
   async getStatus() {
     return await this.medicineService.getStatus();

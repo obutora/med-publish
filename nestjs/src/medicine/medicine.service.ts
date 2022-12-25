@@ -19,6 +19,10 @@ export class MedicineService {
     return await this.prisma.status.findMany();
   }
 
+  async getCount() {
+    return await this.prisma.medicine.count();
+  }
+
   async getMedicineByName(
     name: string,
     isAllContains: boolean,
@@ -101,11 +105,13 @@ export class MedicineService {
   }
 
   async statusLog() {
-    await this.prisma.status.delete({
-      where: {
-        id: 1,
-      },
-    });
+    try {
+      await this.prisma.status.delete({
+        where: {
+          id: 1,
+        },
+      });
+    } catch (e) {}
 
     return await this.prisma.status.create({
       data: {
