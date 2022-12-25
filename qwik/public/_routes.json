@@ -1,0 +1,15 @@
+{
+    "include": [
+        "/*"
+    ],
+    "exclude": [
+        "/_headers",
+        "/_redirects",
+        "/build/*",
+        "/favicon.ico",
+        "/manifest.json",
+        "/service-worker.js",
+        "/about"
+    ],
+    "version": 1
+}
