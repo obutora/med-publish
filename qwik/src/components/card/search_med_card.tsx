@@ -1,5 +1,4 @@
 import { component$, Resource, useResource$, useStore } from "@builder.io/qwik";
-import axios from "axios";
 import Radio_card from "../radio_button/radio_card";
 import S_card from "./s_card";
 
@@ -25,13 +24,25 @@ export default component$(() => {
     ctx.track(() => inputState.searchWord);
     ctx.track(() => inputState.isAllSell);
 
-    const result = await axios.get(
-      `${import.meta.env.VITE_ENDPOINT}/medicine/name/${
-        inputState.searchWord
-      }/${inputState.isAllSell}`
-    );
+    // const result = await axios.get(
+    // `${import.meta.env.VITE_ENDPOINT}/medicine/name/${
+    //   inputState.searchWord
+    // }/${inputState.isAllSell}`
+    // );
 
-    return result.data;
+    const url = `${import.meta.env.VITE_ENDPOINT}/medicine/name/${
+      inputState.searchWord
+    }/${inputState.isAllSell}`;
+
+    const result = await fetch(url);
+
+    const data = await result.json();
+
+    if (data.length > 0) {
+      return data;
+    } else {
+      return [];
+    }
   });
 
   return (
