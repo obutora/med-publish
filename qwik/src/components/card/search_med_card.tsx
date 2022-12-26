@@ -1,4 +1,4 @@
-import { component$, useStore, useTask$ } from "@builder.io/qwik";
+import { component$, Resource, useResource$, useStore } from "@builder.io/qwik";
 import Radio_card from "../radio_button/radio_card";
 import S_card from "./s_card";
 
@@ -17,60 +17,58 @@ export default component$(() => {
   const inputState = useStore({
     searchWord: "",
     isAllSell: false,
-    medList: [] as medicine[],
+    // medList: [] as medicine[],
   });
 
-  useTask$(async ({ track }) => {
-    track(() => inputState.searchWord);
-    track(() => inputState.isAllSell);
-
-    const endPoint = import.meta.env.VITE_ENDPOINT;
-    const url = `${endPoint}/medicine/name/${inputState.searchWord}/${inputState.isAllSell}`;
-
-    if (inputState.searchWord === "") {
-      inputState.medList = [];
-    } else {
-      try {
-        const result = await fetch(url);
-
-        if (result.status === 200) {
-          const data = await result.json();
-          inputState.medList = data;
-        } else {
-          inputState.medList = [];
-        }
-      } catch (e) {
-        console.log(e);
-        inputState.medList = [];
-      }
-    }
-  });
-
-  // const medList = useEndpoint<medicine[]>();
-
-  // const medResource = useResource$<medicine[]>(async (ctx) => {
-  //   ctx.track(() => inputState.searchWord);
-  //   ctx.track(() => inputState.isAllSell);
+  // useTask$(async ({ track }) => {
+  //   track(() => inputState.searchWord);
+  //   track(() => inputState.isAllSell);
 
   //   const endPoint = import.meta.env.VITE_ENDPOINT;
   //   const url = `${endPoint}/medicine/name/${inputState.searchWord}/${inputState.isAllSell}`;
 
-  //   if (inputState.searchWord === "") return [];
+  //   if (inputState.searchWord === "") {
+  //     inputState.medList = [];
+  //   } else {
+  //     try {
+  //       const result = await fetch(url);
 
-  //   try {
-  //     const result = await fetch(url);
-
-  //     if (result.status === 200) {
-  //       const data = await result.json();
-  //       return data;
-  //     } else {
-  //       return [];
+  //       if (result.status === 200) {
+  //         const data = await result.json();
+  //         inputState.medList = data;
+  //       } else {
+  //         inputState.medList = [];
+  //       }
+  //     } catch (e) {
+  //       console.log(e);
+  //       inputState.medList = [];
   //     }
-  //   } catch (e) {
-  //     console.log(e);
-  //     return [];
   //   }
   // });
+
+  const medResource = useResource$<medicine[]>(async (ctx) => {
+    ctx.track(() => inputState.searchWord);
+    ctx.track(() => inputState.isAllSell);
+
+    const endPoint = import.meta.env.VITE_ENDPOINT;
+    const url = `${endPoint}/medicine/name/${inputState.searchWord}/${inputState.isAllSell}`;
+
+    if (inputState.searchWord === "") return [];
+
+    try {
+      const result = await fetch(url);
+
+      if (result.status === 200) {
+        const data = await result.json();
+        return data;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      console.log(e);
+      return [];
+    }
+  });
 
   return (
     <S_card>
@@ -129,7 +127,7 @@ export default component$(() => {
       </div>
 
       <div class="mt-4">
-        {inputState.medList.map((med) => {
+        {/* {inputState.medList.map((med) => {
           return (
             <div
               class={
@@ -172,8 +170,8 @@ export default component$(() => {
               </div>
             </div>
           );
-        })}
-        {/* <Resource
+        })} */}
+        <Resource
           value={medResource}
           onPending={() => <div>Loading...</div>}
           onRejected={() => <div></div>}
@@ -233,7 +231,7 @@ export default component$(() => {
               </div>
             );
           }}
-        ></Resource> */}
+        ></Resource>
       </div>
     </S_card>
   );
