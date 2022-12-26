@@ -14,7 +14,6 @@ interface medicine {
 }
 
 export default component$(() => {
-  //   const inputState = useSignal("");
   const inputState = useStore({
     searchWord: "",
     isAllSell: false,
@@ -27,6 +26,8 @@ export default component$(() => {
     const endPoint = import.meta.env.VITE_ENDPOINT;
     const url = `${endPoint}/medicine/name/${inputState.searchWord}/${inputState.isAllSell}`;
 
+    if (inputState.searchWord === "") return [];
+
     try {
       const result = await fetch(url);
 
@@ -38,6 +39,7 @@ export default component$(() => {
       }
     } catch (e) {
       console.log(e);
+      return [];
     }
   });
 
