@@ -24,12 +24,6 @@ export default component$(() => {
     ctx.track(() => inputState.searchWord);
     ctx.track(() => inputState.isAllSell);
 
-    // const result = await axios.get(
-    // `${import.meta.env.VITE_ENDPOINT}/medicine/name/${
-    //   inputState.searchWord
-    // }/${inputState.isAllSell}`
-    // );
-
     const url = `${import.meta.env.VITE_ENDPOINT}/medicine/name/${
       inputState.searchWord
     }/${inputState.isAllSell}`;
