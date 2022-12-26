@@ -24,18 +24,20 @@ export default component$(() => {
     ctx.track(() => inputState.searchWord);
     ctx.track(() => inputState.isAllSell);
 
-    const url = `${import.meta.env.VITE_ENDPOINT}/medicine/name/${
-      inputState.searchWord
-    }/${inputState.isAllSell}`;
+    const endPoint = import.meta.env.VITE_ENDPOINT;
+    const url = `${endPoint}/medicine/name/${inputState.searchWord}/${inputState.isAllSell}`;
 
-    const result = await fetch(url);
+    try {
+      const result = await fetch(url);
 
-    const data = await result.json();
-
-    if (data.length > 0) {
-      return data;
-    } else {
-      return [];
+      if (result.status === 200) {
+        const data = await result.json();
+        return data;
+      } else {
+        return [];
+      }
+    } catch (e) {
+      console.log(e);
     }
   });
 
@@ -101,7 +103,9 @@ export default component$(() => {
           onPending={() => <div>Loading...</div>}
           onRejected={() => <div></div>}
           onResolved={(medList) => {
-            return (
+            return medList.length === 0 ? (
+              <div>{"データが見つかりません。"}</div>
+            ) : (
               <div>
                 {medList.map((med) => {
                   return (
