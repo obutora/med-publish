@@ -1,4 +1,4 @@
-import { component$, Resource, useResource$, useStore } from "@builder.io/qwik";
+import { component$, useStore, useTask$ } from "@builder.io/qwik";
 import Radio_card from "../radio_button/radio_card";
 import S_card from "./s_card";
 
@@ -17,31 +17,60 @@ export default component$(() => {
   const inputState = useStore({
     searchWord: "",
     isAllSell: false,
+    medList: [] as medicine[],
   });
 
-  const medResource = useResource$<medicine[]>(async (ctx) => {
-    ctx.track(() => inputState.searchWord);
-    ctx.track(() => inputState.isAllSell);
+  useTask$(async ({ track }) => {
+    track(() => inputState.searchWord);
+    track(() => inputState.isAllSell);
 
     const endPoint = import.meta.env.VITE_ENDPOINT;
     const url = `${endPoint}/medicine/name/${inputState.searchWord}/${inputState.isAllSell}`;
 
-    if (inputState.searchWord === "") return [];
+    if (inputState.searchWord === "") {
+      inputState.medList = [];
+    } else {
+      try {
+        const result = await fetch(url);
 
-    try {
-      const result = await fetch(url);
-
-      if (result.status === 200) {
-        const data = await result.json();
-        return data;
-      } else {
-        return [];
+        if (result.status === 200) {
+          const data = await result.json();
+          inputState.medList = data;
+        } else {
+          inputState.medList = [];
+        }
+      } catch (e) {
+        console.log(e);
+        inputState.medList = [];
       }
-    } catch (e) {
-      console.log(e);
-      return [];
     }
   });
+
+  // const medList = useEndpoint<medicine[]>();
+
+  // const medResource = useResource$<medicine[]>(async (ctx) => {
+  //   ctx.track(() => inputState.searchWord);
+  //   ctx.track(() => inputState.isAllSell);
+
+  //   const endPoint = import.meta.env.VITE_ENDPOINT;
+  //   const url = `${endPoint}/medicine/name/${inputState.searchWord}/${inputState.isAllSell}`;
+
+  //   if (inputState.searchWord === "") return [];
+
+  //   try {
+  //     const result = await fetch(url);
+
+  //     if (result.status === 200) {
+  //       const data = await result.json();
+  //       return data;
+  //     } else {
+  //       return [];
+  //     }
+  //   } catch (e) {
+  //     console.log(e);
+  //     return [];
+  //   }
+  // });
 
   return (
     <S_card>
@@ -100,7 +129,51 @@ export default component$(() => {
       </div>
 
       <div class="mt-4">
-        <Resource
+        {inputState.medList.map((med) => {
+          return (
+            <div
+              class={
+                "rounded-lg border border-kSkyBlue text-kDarkBlue my-2 p-4"
+              }
+            >
+              <div
+                class={"flex text-xs gap-1 mb-1 items-center text-kDarkBlue/60"}
+              >
+                <div
+                  class={
+                    "bg-kSkyBlue/40 rounded-md px-2 py-1 text-kDarkBlue font-semibold"
+                  }
+                >
+                  {med.isGeneric ? "後発" : "先発"}
+                </div>
+                <div>{`¥${med.unit_price}`}</div>
+                <div class={"grow"}></div>
+                <div>{med.category}</div>
+              </div>
+              <div
+                class={
+                  "text-lg xl:text-xl font-semibold break-words my-2 xl:my-4"
+                }
+              >
+                {med.name}
+              </div>
+              <div class="flex items-center mt-2">
+                <div class={"grow"}></div>
+                <div
+                  class={
+                    "border-l-2 border-kOrange flex pl-2 items-baseline gap-1 w-fit"
+                  }
+                >
+                  <p class={"text-xl font-semibold my-0 xl:text-3xl"}>
+                    {med.amount}
+                  </p>
+                  <p class={"text-xs my-0 text-kDarkBlue/60"}>{med.unit}</p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+        {/* <Resource
           value={medResource}
           onPending={() => <div>Loading...</div>}
           onRejected={() => <div></div>}
@@ -160,7 +233,7 @@ export default component$(() => {
               </div>
             );
           }}
-        ></Resource>
+        ></Resource> */}
       </div>
     </S_card>
   );
