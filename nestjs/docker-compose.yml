@@ -12,3 +12,15 @@ services:
     ports:
       - 3668:3000
     restart: always
+
+  https-portal:
+    image: steveltn/https-portal:1
+    ports:
+      - '80:80'
+      - '443:443'
+    restart: always
+    environment:
+      DOMAINS: 'ph-online.site -> http://api:3668'
+      # STAGE: "staging"
+      STAGE: 'production' # Don't use production until staging works
+      # FORCE_RENEW: 'true'
