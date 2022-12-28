@@ -72,10 +72,7 @@ export default component$(() => {
 
   return (
     <S_card>
-      <label
-        for="default-input"
-        class="block mb-2 text-sm text-kDarkBlue/60 dark:text-white w-full"
-      >
+      <label for="default-input" class="block mb-2 w-full caption">
         薬の名前を入力して🔎ボタンで検索できます。
       </label>
       <div class="flex gap-2 items-center">
@@ -176,58 +173,88 @@ export default component$(() => {
           onPending={() => <div>Loading...</div>}
           onRejected={() => <div></div>}
           onResolved={(medList) => {
-            return medList.length === 0 ? (
-              <div>{"データが見つかりません。"}</div>
-            ) : (
+            return (
               <div>
-                {medList.map((med) => {
-                  return (
-                    <div
-                      class={
-                        "rounded-lg border border-kSkyBlue text-kDarkBlue my-2 p-4"
-                      }
-                    >
-                      <div
-                        class={
-                          "flex text-xs gap-1 mb-1 items-center text-kDarkBlue/60"
-                        }
-                      >
+                {inputState.searchWord === "" ? (
+                  <p class={"caption"}>{"検索ワードを入力してください"}</p>
+                ) : medList.length === 0 ? (
+                  <p class={"caption"}>
+                    {`${inputState.searchWord} は見つかりませんでした。`}
+                    <br />
+                    {
+                      "一時的に在庫がゼロになっている場合もあるので直接お問い合わせください。"
+                    }
+                  </p>
+                ) : (
+                  <div>
+                    {medList.map((med) => {
+                      return (
                         <div
                           class={
-                            "bg-kSkyBlue/40 rounded-md px-2 py-1 text-kDarkBlue font-semibold"
+                            "rounded-lg border border-kSkyBlue text-kDarkBlue my-2 p-4"
                           }
                         >
-                          {med.isGeneric ? "後発" : "先発"}
+                          <div
+                            class={
+                              "flex text-xs gap-1 mb-1 items-center text-kDarkBlue/60"
+                            }
+                          >
+                            <div
+                              class={
+                                "bg-kSkyBlue/40 rounded-md px-2 py-1 text-kDarkBlue font-semibold"
+                              }
+                            >
+                              {med.isGeneric ? "後発" : "先発"}
+                            </div>
+                            <div>{`¥${med.unit_price}`}</div>
+                            <div class={"grow"}></div>
+                            <div>{med.category}</div>
+                          </div>
+                          <div
+                            class={
+                              "text-lg xl:text-xl font-semibold break-words mt-2 xl:mt-4"
+                            }
+                          >
+                            {med.name}
+                          </div>
+                          <div class={"mt-2"}>
+                            <p
+                              class={
+                                "inline-block bg-kSkyBlue/40 rounded-md px-2 py-1 text-kDarkBlue font-semibold text-xs my-0"
+                              }
+                            >
+                              {"成分名"}
+                            </p>
+                            <p
+                              class={
+                                "text-xs xl:text-sm text-kDarkBlue/60 break-words my-0 py-1"
+                              }
+                            >
+                              {med.general_name}
+                            </p>
+                          </div>
+                          <div class="flex items-center mt-2">
+                            <div class={"grow"}></div>
+                            <div
+                              class={
+                                "border-l-2 border-kOrange flex pl-2 items-baseline gap-1 w-fit"
+                              }
+                            >
+                              <p
+                                class={"text-xl font-semibold my-0 xl:text-3xl"}
+                              >
+                                {med.amount}
+                              </p>
+                              <p class={"text-xs my-0 text-kDarkBlue/60"}>
+                                {med.unit}
+                              </p>
+                            </div>
+                          </div>
                         </div>
-                        <div>{`¥${med.unit_price}`}</div>
-                        <div class={"grow"}></div>
-                        <div>{med.category}</div>
-                      </div>
-                      <div
-                        class={
-                          "text-lg xl:text-xl font-semibold break-words my-2 xl:my-4"
-                        }
-                      >
-                        {med.name}
-                      </div>
-                      <div class="flex items-center mt-2">
-                        <div class={"grow"}></div>
-                        <div
-                          class={
-                            "border-l-2 border-kOrange flex pl-2 items-baseline gap-1 w-fit"
-                          }
-                        >
-                          <p class={"text-xl font-semibold my-0 xl:text-3xl"}>
-                            {med.amount}
-                          </p>
-                          <p class={"text-xs my-0 text-kDarkBlue/60"}>
-                            {med.unit}
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             );
           }}

@@ -124,3 +124,7 @@ a.mindblow:hover {
   margin-bottom: 4px;
   transform: translateY(4px);
 }
+
+.caption {
+  @apply text-sm text-kDarkBlue/70;
+}
