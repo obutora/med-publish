@@ -38,6 +38,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   PostStatus postStatus = PostStatus.none;
   bool isPosting = false;
+  String medStatus = '';
 
   @override
   Widget build(BuildContext context) {
@@ -106,17 +107,31 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 12,
             ),
             Text(
-              // postStatus == PostStatus.success
-              //     ? '成功しました！'
-              //     : postStatus == PostStatus.failed
-              //         ? '何らかの原因で失敗しました。管理者に問い合わせしてください。'
-              //         : '',
               postStatus.name,
               style: Theme.of(context).textTheme.caption!.copyWith(
                   color: postStatus == PostStatus.success
                       ? Colors.teal
                       : Colors.orangeAccent),
-            )
+            ),
+            const SizedBox(
+              height: 40,
+            ),
+            ElevatedButton(
+                onPressed: () async {
+                  final statusString = await MedHttpHandler.getStatus();
+
+                  setState(() {
+                    medStatus = statusString;
+                  });
+                },
+                child: const Text('Get Status')),
+            Text(
+              medStatus,
+              style: Theme.of(context).textTheme.caption!.copyWith(
+                  color: postStatus == PostStatus.success
+                      ? Colors.teal
+                      : Colors.orangeAccent),
+            ),
           ],
         ),
       ),

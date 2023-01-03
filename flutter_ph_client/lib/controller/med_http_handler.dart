@@ -22,7 +22,31 @@ class MedHttpHandler {
           return PostStatus.success;
         } else {
           print(response.body);
-          return PostStatus.failed;
+          return PostStatus.error;
+        }
+      } catch (e) {
+        return PostStatus.failed;
+      }
+    }
+  }
+
+  static Future<String> getStatus() async {
+    final baseUrl = dotenv.env['ENDPOINT'];
+
+    //envファイルがない場合はエラーを投げる
+    if (baseUrl == null) {
+      return 'noEnv';
+    } else {
+      final Uri endpoint = Uri.parse('$baseUrl/medicine/status');
+
+      try {
+        final response = await http.get(endpoint);
+
+        if (response.statusCode == 200) {
+          return response.body;
+        } else {
+          print(response.body);
+          return 'failed';
         }
       } catch (e) {
         throw Error();
