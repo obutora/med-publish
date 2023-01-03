@@ -1,6 +1,6 @@
 import { component$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
-import Search_med_card from "~/components/card/search_med_card";
+import Search_med_block from "~/components/card/search_med_block";
 import S_card from "~/components/card/s_card";
 import Latest_update from "~/components/information/latest_update";
 
@@ -20,7 +20,7 @@ export default component$(() => {
         </div>
       </S_card>
 
-      <Search_med_card />
+      <Search_med_block />
     </div>
   );
 });

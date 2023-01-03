@@ -10,7 +10,7 @@ interface RadioProps {
 
 export default component$((props: RadioProps) => {
   return (
-    <div class="flex p-4 rounded-lg hover:bg-kSkyBlue/10 dark:hover:bg-gray-600 border">
+    <div class="flex p-4 rounded-lg hover:bg-kSkyBlue/10 border">
       <div class="flex items-center h-5">
         <input
           name="helper-radio"
@@ -24,12 +24,12 @@ export default component$((props: RadioProps) => {
       <div class="ml-2 text-sm">
         <label
           for="helper-radio-6"
-          class="font-semibold text-lg text-kDarkBlue dark:text-gray-300"
+          class="font-semibold text-lg text-kDarkBlue"
         >
           <div>{props.label}</div>
           <p
             id="helper-radio-text-6"
-            class="text-xs break-words my-1 font-normal text-gray-500 dark:text-gray-300"
+            class="text-xs break-words my-1 font-normal text-gray-500"
           >
             {props.description}
           </p>
