@@ -4,6 +4,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'controller/data_file_handler.dart';
 import 'controller/med_http_handler.dart';
+import 'entity/postStatus.dart';
 
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,8 +28,6 @@ class MyApp extends StatelessWidget {
   }
 }
 
-enum PostStatus { success, failed, none }
-
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -48,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              'POSTAN',
+              'Ph Client',
               style: Theme.of(context).textTheme.headline1,
             ),
             const SizedBox(
@@ -89,20 +88,14 @@ class _HomeScreenState extends State<HomeScreen> {
                 await DataFileHandler.pickCsvSaveJson();
 
                 final jsonString = await DataFileHandler.readJson();
-                final bool isScucessPost =
-                    await MedHttpHandler.putJson(jsonString);
+                final status = await MedHttpHandler.putJson(jsonString);
+
                 // print(jsonString);
                 // const bool isScucessPost = true;
 
-                if (isScucessPost) {
-                  setState(() {
-                    postStatus = PostStatus.success;
-                  });
-                } else {
-                  setState(() {
-                    postStatus = PostStatus.failed;
-                  });
-                }
+                setState(() {
+                  postStatus = status;
+                });
 
                 setState(() {
                   isPosting = false;
@@ -113,11 +106,12 @@ class _HomeScreenState extends State<HomeScreen> {
               height: 12,
             ),
             Text(
-              postStatus == PostStatus.success
-                  ? '成功しました！'
-                  : postStatus == PostStatus.failed
-                      ? '何らかの原因で失敗しました。管理者に問い合わせしてください。'
-                      : '',
+              // postStatus == PostStatus.success
+              //     ? '成功しました！'
+              //     : postStatus == PostStatus.failed
+              //         ? '何らかの原因で失敗しました。管理者に問い合わせしてください。'
+              //         : '',
+              postStatus.name,
               style: Theme.of(context).textTheme.caption!.copyWith(
                   color: postStatus == PostStatus.success
                       ? Colors.teal
