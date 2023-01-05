@@ -26,11 +26,11 @@ export default component$(() => {
 });
 
 export const head: DocumentHead = {
-  title: "Welcome to Qwik",
+  title: "医薬品検索",
   meta: [
     {
-      name: "description",
-      content: "Qwik site description",
+      name: "医薬品検索",
+      content: "薬局が在庫している医薬品を検索することができるサイトです。",
     },
   ],
 };
