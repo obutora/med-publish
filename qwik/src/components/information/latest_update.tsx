@@ -11,7 +11,8 @@ export default component$(() => {
     const data = await result.json();
     const date = new Date(data[0].updateAt);
 
-    fetchedUpdatedAt.value = `${date.toLocaleString()}`;
+//     fetchedUpdatedAt.value = `${date.toLocaleString()}`;
+    fetchedUpdatedAt.value = `${date.getFullYear()}/${date.getMonth()}/{date.getDate()}`;
   });
 
   return (
