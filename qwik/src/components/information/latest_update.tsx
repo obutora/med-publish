@@ -12,7 +12,7 @@ export default component$(() => {
     const date = new Date(data[0].updateAt);
 
 //     fetchedUpdatedAt.value = `${date.toLocaleString()}`;
-    fetchedUpdatedAt.value = `${date.getFullYear()}/${date.getMonth()}/{date.getDate()}`;
+    fetchedUpdatedAt.value = `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`;
   });
 
   return (
