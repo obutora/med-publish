@@ -34,7 +34,7 @@ Nestjs -- データ返却 --> Qwik
 
 exampleでは医療機関用フロントは`Cloudflare Pages`にてホスティングしています。  
 `qwik`には`cloudflare pages functions`のアダプターが用意されているため簡単に実装可能です。  
-`.env`でエンドポイントを指定する必要があります。
+`.env`で下記APIのエンドポイントを指定する必要があります。
 
 nestjsのDBにはSQLiteを選択しました。  
 主応需先が閲覧できれば十分のため、SQLiteで十分です。  
